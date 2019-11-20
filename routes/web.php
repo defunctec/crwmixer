@@ -12,17 +12,13 @@
 */
 
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;
-
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
 
 Auth::routes();
-
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-Route::post('/submit-order', 'AjaxController@index')->name('submit-order');
 
 Route::group(['namespace' => 'User', 'as' => 'user.'], function () {
     Route::get('signup', [UserController::class, 'signup'])->name('signup');
 });
+
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::post('/submit-order', 'AjaxController@index')->name('submit-order');

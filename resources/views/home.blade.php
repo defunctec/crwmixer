@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Mix Bitcoin'. ' | ' . 'Mix Bitcoin')
+@section('title', 'Crown Mixer'. ' | ' . 'Crown Mixer')
 
 @section('content')
 @include('includes.header')
-<div class="slide" id="slide-main" data-slide="0" data-stellar-background-ratio="0.1">
+<div class="slide slide-main main" id="slide-main" data-slide="0" data-stellar-background-ratio="0.1">
     <div class="buffer">
         <div id="headerbox">
             <div id="headercontent"><h1><span style="font-size: 30px;">Mix your Bitcoins</span> <span style="text-transform: uppercase;">Annonymously!</span></h1></div>
@@ -29,6 +29,7 @@
         <div id="submitError">
         </div>
         <form id="submitOrder" action="" method="post">
+            @csrf
             <div class="inputWrapper">
                 <div class="popover">
                     <div class="arrow"></div>
@@ -45,7 +46,7 @@
 
                <input class="orderInput" name="order_address" type="text" id="address" value="" placeholder="Enter your Bitcoin address, where to send mixed Bitcoins" />
             </div>
-            <button class="submitorder" type="submit" id="submitorder">Place order</button>                
+            <button class="submitorder" id="submitorder">Place order</button>                
         </form>
         <div id="submitOrderLoader">
             <p>Your order is being processed...</p>
@@ -74,7 +75,6 @@
     <div class="buffer content">
         <div class="head-area">
             <h2 class="contentheader" id="feescontent">Fees - just 1% from order size</h2>
-            
         </div>
         <div class="light-splitter"></div>
       <div class="dark-content">
@@ -143,13 +143,13 @@
         </div>
     </div>
     <div id="map"></div>
-       <a class="button button-arrow button-top" data-slide="0" title="Return back on top"></a>
+       <a class="button button-arrow button-top" id="go_top" title="Return back on top"></a>
     </div><!--End Slide 4-->
-<div id="footer">
-    <div class="buffer">
-        <p>&copy; 2013 BitcoinMixer. All rights reserved.</p>
+    <div id="footer">
+        <div class="buffer">
+            <p>&copy; 2013 BitcoinMixer. All rights reserved.</p>
+        </div>
     </div>
-</div>
 <script>
     var url = '<?= route('submit-order') ?>';
 
@@ -159,12 +159,14 @@
         $('#submitError').hide();
         $('#submitError').html('');
 
-        var data = $('#submitOrder').serialize();
+        var amount = $('#amount').val();
+        var address = $('#address').val();
         $.ajax({
             url: url,
             type: "POST",
             data: {
-                data: data,
+                amount: amount,
+                address: address,
                 _token: '{{csrf_token()}}'
             },
             success: function(data){
@@ -199,7 +201,6 @@
         $('#submitOrderSuccess').html("");
         $('#submitOrder').show();   
     });
-
     $(document).ready(function () {
         $('#place_order').click(function() {
             $('html, body').animate({
@@ -225,8 +226,12 @@
             $('html, body').animate({
                 scrollTop: $(".contact_us").offset().top
             }, 1000)
+        }),
+        $('#go_top').click(function (){
+            $('html, body').animate({
+                scrollTop: $(".slide-main").offset().top
+            }, 1000)
         })
     });
 </script>
-
 @endsection

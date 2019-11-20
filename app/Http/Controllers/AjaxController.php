@@ -12,12 +12,8 @@ class AjaxController extends Controller
      */
     public function index(Request $request)
 	{
-		$data 		  =  $request["data"];
-		$parameters   =  explode("&", $data);
-        $amountData   =  explode("=", $parameters[0]);
-		$amount 	  =  $amountData[1];
-		$addressData  =  explode("=", $parameters[1]);
-		$address 	  =  $addressData[1];
+		$amount = $request->get('amount');
+		$address = $request->get('address');
 
 		$ip = ip2long($request->getClientIp());
 
@@ -45,8 +41,6 @@ class AjaxController extends Controller
 			$response['order_key'] 	= 	!empty($serve_response->order_key) ? $serve_response->order_key : false;
 			$response['message'] 	= 	$serve_response->message;
 		}
-
         return response()->json($response);
 	}
-
 }
